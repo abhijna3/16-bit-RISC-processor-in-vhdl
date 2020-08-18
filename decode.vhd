@@ -66,7 +66,7 @@ rc	<=irint(5 downto 3);
 imm6 <= irint(5 downto 0);
 imm9 <= irint(8 downto 0);
 imm6_se(5 downto 0) <= imm6;
-imm6_se(15 downto 6) <= (others=>imm6(5));
+imm6_se(15 downto 6) <= (others=>'0');--imm6(5));
 cond2<=irint(1 downto 0);
 irint<=ir;
 wr_bpt<='1' when (opcode="1100" or opcode="1000") else '0';
@@ -232,7 +232,7 @@ control_proc:process(clk,rst) is
 				elsif(opcode="0001" or opcode="0100" or opcode="0101") then --adi,lw,sw
 					im_se<=imm6_se;
 				elsif(opcode="1100" or opcode="1000") then --beq and jal
-					im_se<=std_logic_vector(signed(pc) + signed(imm6_se)) ;
+					im_se<=std_logic_vector(unsigned(pc) + unsigned(imm6_se)) ;
 				else
 					im_se<=(others=>'0');
 				end if;
