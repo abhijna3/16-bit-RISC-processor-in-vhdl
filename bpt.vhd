@@ -42,6 +42,7 @@ process(clk,rst)
 variable found,branch,match:boolean;
 variable pointer: integer;
 variable a,b:std_logic;
+
 begin
 	if(rising_edge(clk)) then
 		if(rst='1') then
@@ -50,10 +51,11 @@ begin
 				t1(i).target<=(others=>'0');
 				t1(i).hb<="01";
 			end loop;
+			--resv:=true;
 			found:=false;
 			pointer:=0;
 			branch:=false;
-			pc_out<=x"0001";
+			pc_out<=x"0000";
 			hazard_flush<='0';	--if branch is changed then flush
 			--pcplus1<=x"0002";
 		elsif(branch_r7='1') then
@@ -112,6 +114,9 @@ begin
 				hazard_flush<='1';
 			else
 				hazard_flush<='0';
+				if(pc_out=x"0000") then
+					pc_out<=x"0001";
+				else
 				for j in 0 to 10 loop--------------
 					if(t1(j).pc=pc_out) then
 						match:=true;
@@ -122,8 +127,8 @@ begin
 					--pc_out<=std_logic_vector(unsigned(pc_out)+1);
 					pc_out<=pc_outp1;
 				end if;
+				end if;
 			end if;
-			
 		end if;
 	end if;
 end process;	
